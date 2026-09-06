@@ -9,7 +9,7 @@ kind: Kustomization
 # BASE
 # ============================================
 # Referencia a configuração base
-bases:
+resources:
   - ../../base                     # Usa manifests da pasta base
 
 # ============================================
@@ -31,5 +31,5 @@ replicas:
 # PATCHES
 # ============================================
 # Aplica modificações específicas aos manifests
-patchesStrategicMerge:
-  - deployment-patch.yaml          # Aumenta recursos para produção
+patches:
+  - path: deployment-patch.yaml    # Aumenta recursos para produção

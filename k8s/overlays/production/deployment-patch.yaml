@@ -18,6 +18,8 @@ metadata:
 spec:
   template:
     spec:
+      imagePullSecrets:
+      - name: ecr-registry
       containers:
       - name: fiap-todo-api        # Nome do container (deve corresponder ao base)
         

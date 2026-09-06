@@ -24,9 +24,11 @@ resources:
 # LABELS COMUNS
 # ============================================
 # Labels aplicadas a todos os recursos
-commonLabels:
-  app: fiap-todo-api               # Identifica a aplicação
-  managed-by: kustomize            # Indica gerenciamento pelo Kustomize
+labels:
+- pairs:
+    app: fiap-todo-api             # Identifica a aplicação
+    managed-by: kustomize          # Indica gerenciamento pelo Kustomize
+  includeSelectors: true
 
 # ============================================
 # IMAGENS

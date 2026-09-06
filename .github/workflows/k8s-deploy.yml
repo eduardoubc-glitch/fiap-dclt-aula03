@@ -39,6 +39,16 @@ jobs:
           aws eks update-kubeconfig \
             --name ${{ env.CLUSTER_NAME }} \
             --region ${{ env.AWS_REGION }}
+
+      - name: 🔐 Configure ECR image pull secret
+        run: |
+          ECR_REGISTRY=$(aws sts get-caller-identity --query Account --output text).dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
+          ECR_PASSWORD=$(aws ecr get-login-password --region ${{ env.AWS_REGION }})
+          kubectl create secret docker-registry ecr-registry \
+            --docker-server="$ECR_REGISTRY" \
+            --docker-username=AWS \
+            --docker-password="$ECR_PASSWORD" \
+            --dry-run=client -o yaml | kubectl apply -f -
       
       - name: 🔧 Setup Kustomize
         run: |
@@ -54,7 +64,7 @@ jobs:
       - name: 🚀 Deploy to Kubernetes
         run: |
           kubectl apply -k k8s/overlays/production
-          kubectl rollout status deployment/prod-fiap-todo-api
+          kubectl rollout status deployment/prod-fiap-todo-api --timeout=5m
       
       - name: 🧪 Smoke test
         continue-on-error: true
